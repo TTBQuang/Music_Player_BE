@@ -1,5 +1,6 @@
 package com.music.music_player.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,6 +19,10 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @JsonProperty("display_name")
     @Column(name = "display_name", nullable = false)
     private String displayName;
+
+    @Column(nullable = false)
+    private String authority;
 }
