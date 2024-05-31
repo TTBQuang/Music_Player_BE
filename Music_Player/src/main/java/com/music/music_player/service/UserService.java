@@ -2,9 +2,11 @@ package com.music.music_player.service;
 
 
 import com.music.music_player.exception.InvalidCredentialsException;
+import com.music.music_player.exception.UnknownUserException;
 import com.music.music_player.exception.UsernameAlreadyExistsException;
-import com.music.music_player.model.User;
+import com.music.music_player.entity.User;
 import com.music.music_player.repository.UserRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,22 @@ public class UserService {
             throw new InvalidCredentialsException();
         }
         return user;
-        //return new CustomUserDetails(user);
+    }
+
+    public boolean updateUser(User newUser) {
+        User existingUser = userRepository.findById((long) newUser.getId()).orElse(null);
+
+        if (existingUser == null) {
+            throw new UnknownUserException();
+        }
+
+        try {
+            BeanUtils.copyProperties(newUser, existingUser);
+            userRepository.save(existingUser);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

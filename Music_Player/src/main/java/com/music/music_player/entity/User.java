@@ -1,8 +1,12 @@
-package com.music.music_player.model;
+package com.music.music_player.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
@@ -25,4 +29,16 @@ public class User {
 
     @Column(nullable = false)
     private String authority;
+
+    @ManyToMany()
+    @JsonIgnore
+    @JoinTable(
+            name = "user_like_song",
+            joinColumns = @JoinColumn(name = "id_user"),
+            inverseJoinColumns = @JoinColumn(name = "id_song"))
+    private Set<Song> favoriteSongs = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade=CascadeType.ALL)
+    @JsonIgnore
+    Set<ListenHistory> listenHistories;
 }
