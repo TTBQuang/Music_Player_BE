@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -49,10 +50,22 @@ public class Song {
     private Set<Genre> genreOfSong = new HashSet<>();
 
     @ManyToMany()
-    @JsonIgnore
+    @JsonProperty("singers")
     @JoinTable(
             name = "singer_of_song",
             joinColumns = @JoinColumn(name = "id_song"),
             inverseJoinColumns = @JoinColumn(name = "id_singer"))
     private Set<Singer> singerOfSong = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Song song)) return false;
+        return id == song.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

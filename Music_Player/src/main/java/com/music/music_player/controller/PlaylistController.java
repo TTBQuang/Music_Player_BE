@@ -1,6 +1,7 @@
 package com.music.music_player.controller;
 
 import com.music.music_player.dto.PlaylistDto;
+import com.music.music_player.entity.Song;
 import com.music.music_player.service.PlaylistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

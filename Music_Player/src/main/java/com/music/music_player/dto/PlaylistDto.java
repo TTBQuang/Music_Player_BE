@@ -8,6 +8,7 @@ public class PlaylistDto {
     private final int id;
     private String name;
     private String image;
+    private final int size;
 
     public PlaylistDto(Playlist playlist){
         this.id = playlist.getId();
@@ -18,5 +19,6 @@ public class PlaylistDto {
             this.name = playlist.getSinger().getName();
             this.image = playlist.getSinger().getImage();
         }
+        this.size = playlist.getSongs().size();
     }
 }

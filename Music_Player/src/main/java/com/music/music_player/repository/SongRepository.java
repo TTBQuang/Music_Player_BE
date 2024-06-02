@@ -18,4 +18,10 @@ public interface SongRepository extends JpaRepository<Song, Long> {
 
     @Query("SELECT lh.song FROM ListenHistory lh WHERE lh.user.id = :userId ORDER BY lh.time DESC")
     List<Song> findRecentSongsByUserId(@Param("userId") int userId, Pageable pageable);
+
+    @Query("SELECT s FROM Song s JOIN s.genreOfSong g WHERE g.id = :genreId")
+    List<Song> findByGenreId(@Param("genreId") int genreId, Pageable pageable);
+
+    @Query("SELECT s FROM Song s JOIN s.singerOfSong si WHERE si.id = :singerId")
+    List<Song> findBySingerId(@Param("singerId") int singerId, Pageable pageable);
 }

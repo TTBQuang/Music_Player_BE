@@ -18,7 +18,7 @@ public class SongController {
     public ResponseEntity<List<Song>> getNewSongs(
             @RequestParam int pageNumber,
             @RequestParam int pageSize) {
-        List<Song> songs = songService.getNewSongs(pageNumber ,pageSize);
+        List<Song> songs = songService.getNewSongs(pageNumber, pageSize);
         return ResponseEntity.ok(songs);
     }
 
@@ -26,7 +26,7 @@ public class SongController {
     public ResponseEntity<List<Song>> getSongsSortedByLikeCount(
             @RequestParam int pageNumber,
             @RequestParam int pageSize) {
-        List<Song> sortedSongs = songService.getSongsSortedByLikeCount(pageNumber ,pageSize);
+        List<Song> sortedSongs = songService.getSongsSortedByLikeCount(pageNumber, pageSize);
         return ResponseEntity.ok(sortedSongs);
     }
 
@@ -35,7 +35,17 @@ public class SongController {
             @RequestParam int userId,
             @RequestParam int pageNumber,
             @RequestParam int pageSize) {
-        List<Song> sortedSongs = songService.getRecentSongsByUser(userId, pageNumber ,pageSize);
+        List<Song> sortedSongs = songService.getRecentSongsByUser(userId, pageNumber, pageSize);
         return ResponseEntity.ok(sortedSongs);
+    }
+
+    @GetMapping("/in_playlist")
+    public ResponseEntity<List<Song>> getSongsInPlaylist(
+            @RequestParam int playlistId,
+            @RequestParam int pageNumber,
+            @RequestParam int pageSize
+    ) {
+        List<Song> songsInPlaylist = songService.getSongsInPlaylist(playlistId, pageNumber, pageSize);
+        return ResponseEntity.ok(songsInPlaylist);
     }
 }
