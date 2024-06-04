@@ -1,5 +1,6 @@
 package com.music.music_player.controller;
 
+import com.music.music_player.dto.PaginatedResponse;
 import com.music.music_player.dto.PlaylistDto;
 import com.music.music_player.entity.Song;
 import com.music.music_player.service.PlaylistService;
@@ -18,12 +19,12 @@ public class PlaylistController {
     private PlaylistService playlistService;
 
     @GetMapping("/genre")
-    public List<PlaylistDto> getAllGenrePlaylists(@RequestParam int pageNumber, @RequestParam int pageSize) {
+    public PaginatedResponse<PlaylistDto> getAllGenrePlaylists(@RequestParam int pageNumber, @RequestParam int pageSize) {
         return playlistService.getAllGenrePlaylists(pageNumber, pageSize);
     }
 
     @GetMapping("/singer")
-    public List<PlaylistDto> getAllSingerPlaylists(@RequestParam int pageNumber, @RequestParam int pageSize) {
+    public PaginatedResponse<PlaylistDto> getAllSingerPlaylists(@RequestParam int pageNumber, @RequestParam int pageSize) {
         return playlistService.getAllSingerPlaylists(pageNumber, pageSize);
     }
 }

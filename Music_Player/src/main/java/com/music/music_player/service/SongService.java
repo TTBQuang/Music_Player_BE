@@ -1,5 +1,6 @@
 package com.music.music_player.service;
 
+import com.music.music_player.dto.PaginatedResponse;
 import com.music.music_player.entity.Playlist;
 import com.music.music_player.entity.Song;
 import com.music.music_player.repository.PlaylistRepository;
@@ -20,19 +21,22 @@ public class SongService {
     @Autowired
     private PlaylistRepository playlistRepository;
 
-    public List<Song> getNewSongs(int pageNumber, int pageSize) {
+    public PaginatedResponse<Song> getNewSongs(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return songRepository.findAllByOrderByReleaseDateDesc(pageable);
+        int totalItems = songRepository.countAllSong();
+        return new PaginatedResponse<>(songRepository.findAllByOrderByReleaseDateDesc(pageable), totalItems);
     }
 
-    public List<Song> getSongsSortedByLikeCount(int pageNumber, int pageSize) {
+    public PaginatedResponse<Song> getSongsSortedByLikeCount(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return songRepository.findSongsOrderByLikeCountDesc(pageable);
+        int totalItems = songRepository.countAllSong();
+        return new PaginatedResponse<>(songRepository.findSongsOrderByLikeCountDesc(pageable), totalItems);
     }
 
-    public List<Song> getRecentSongsByUser(int id, int pageNumber, int pageSize) {
+    public PaginatedResponse<Song> getRecentSongsByUser(int id, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return songRepository.findRecentSongsByUserId(id, pageable);
+        int totalItems = songRepository.countRecentlyListenSong(id);
+        return new PaginatedResponse<>(songRepository.findRecentSongsByUserId(id, pageable), totalItems);
     }
 
     public List<Song> getSongsInPlaylist(int playlistId, int pageNumber, int pageSize) {

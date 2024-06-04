@@ -1,9 +1,12 @@
 package com.music.music_player.service;
 
+import com.music.music_player.dto.PaginatedResponse;
 import com.music.music_player.dto.PlaylistDto;
 import com.music.music_player.entity.Playlist;
 import com.music.music_player.entity.Song;
+import com.music.music_player.repository.GenreRepository;
 import com.music.music_player.repository.PlaylistRepository;
+import com.music.music_player.repository.SingerRepository;
 import com.music.music_player.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +26,13 @@ public class PlaylistService {
     @Autowired
     private SongRepository songRepository;
 
-    public List<PlaylistDto> getAllGenrePlaylists(int pageNumber, int pageSize) {
+    @Autowired
+    private GenreRepository genreRepository;
+
+    @Autowired
+    private SingerRepository singerRepository;
+
+    public PaginatedResponse<PlaylistDto> getAllGenrePlaylists(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         List<Playlist> playlists = playlistRepository.findAllByGenreNotNull(pageable);
         List<PlaylistDto> playlistDtoList = new ArrayList<>();
@@ -44,10 +53,12 @@ public class PlaylistService {
             playlistDtoList.add(playlistDto);
         }
 
-        return playlistDtoList;
+        int totalItems = (int) genreRepository.count();
+
+        return new PaginatedResponse<>(playlistDtoList, totalItems);
     }
 
-    public List<PlaylistDto> getAllSingerPlaylists(int pageNumber, int pageSize) {
+    public PaginatedResponse<PlaylistDto> getAllSingerPlaylists(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         List<Playlist> playlists = playlistRepository.findAllBySingerNotNull(pageable);
         List<PlaylistDto> playlistDtoList = new ArrayList<>();
@@ -68,6 +79,8 @@ public class PlaylistService {
             playlistDtoList.add(playlistDto);
         }
 
-        return playlistDtoList;
+        int totalItems = (int) singerRepository.count();
+
+        return new PaginatedResponse<>(playlistDtoList, totalItems);
     }
 }
