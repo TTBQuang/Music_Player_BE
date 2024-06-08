@@ -49,4 +49,13 @@ public class SongController {
         List<Song> songsInPlaylist = songService.getSongsInPlaylist(playlistId, pageNumber, pageSize);
         return ResponseEntity.ok(songsInPlaylist);
     }
+
+    @GetMapping("/find")
+    public ResponseEntity<PaginatedResponse<Song>> findSongByName(
+            @RequestParam String name,
+            @RequestParam int pageNumber,
+            @RequestParam int pageSize) {
+        PaginatedResponse<Song> response = songService.findSongByName(name, pageNumber, pageSize);
+        return ResponseEntity.ok(response);
+    }
 }

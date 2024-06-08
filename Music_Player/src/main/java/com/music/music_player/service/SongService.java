@@ -51,4 +51,10 @@ public class SongService {
             return new ArrayList<>();
         }
     }
+
+    public PaginatedResponse<Song> findSongByName(String name, int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        int totalItems = songRepository.countSongsByName(name);
+        return new PaginatedResponse<>(songRepository.findSongByName(name, pageable), totalItems);
+    }
 }
