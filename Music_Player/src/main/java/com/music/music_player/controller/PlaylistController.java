@@ -18,13 +18,18 @@ public class PlaylistController {
     @Autowired
     private PlaylistService playlistService;
 
-    @GetMapping("/genre")
+    @GetMapping("/all/genre")
     public PaginatedResponse<PlaylistDto> getAllGenrePlaylists(@RequestParam int pageNumber, @RequestParam int pageSize) {
         return playlistService.getAllGenrePlaylists(pageNumber, pageSize);
     }
 
-    @GetMapping("/singer")
+    @GetMapping("/all/singer")
     public PaginatedResponse<PlaylistDto> getAllSingerPlaylists(@RequestParam int pageNumber, @RequestParam int pageSize) {
         return playlistService.getAllSingerPlaylists(pageNumber, pageSize);
+    }
+
+    @GetMapping("/singer")
+    public PlaylistDto getPlaylistBySinger(@RequestParam int singerId) {
+        return playlistService.getPlaylistBySinger(singerId);
     }
 }

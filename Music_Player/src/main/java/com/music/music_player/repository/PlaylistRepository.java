@@ -12,4 +12,5 @@ public interface PlaylistRepository extends JpaRepository<Playlist, Integer> {
     List<Playlist> findAllByGenreNotNull(Pageable pageable);
     List<Playlist> findAllBySingerNotNull(Pageable pageable);
     Playlist findById(int playlistId);
+    Playlist findBySingerId(int singerId);
 }

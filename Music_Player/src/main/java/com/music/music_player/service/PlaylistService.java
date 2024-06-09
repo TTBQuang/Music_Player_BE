@@ -83,4 +83,16 @@ public class PlaylistService {
 
         return new PaginatedResponse<>(playlistDtoList, totalItems);
     }
+
+    public PlaylistDto getPlaylistBySinger(int singerId) {
+        Playlist playlist = playlistRepository.findBySingerId(singerId);
+        List<Song> songs = List.of();
+        if (playlist.getSinger() != null) {
+            songs = songRepository.findAll().stream()
+                    .filter(song -> song.getSingerOfSong().contains(playlist.getSinger()))
+                    .collect(Collectors.toList());
+        }
+        playlist.setSongs(songs);
+        return new PlaylistDto(playlist);
+    }
 }
