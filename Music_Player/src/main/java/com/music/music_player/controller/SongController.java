@@ -58,4 +58,10 @@ public class SongController {
         PaginatedResponse<Song> response = songService.findSongByName(name, pageNumber, pageSize);
         return ResponseEntity.ok(response);
     }
+
+//    @GetMapping("/songs/{songId}/users/{userId}/liked")
+//    public ResponseEntity<Boolean> isSongLikedByUser(@PathVariable int userId, @PathVariable int songId) {
+//        boolean isLiked = songService.isSongLikedByUser(userId, songId);
+//        return ResponseEntity.ok(isLiked);
+//    }
 }

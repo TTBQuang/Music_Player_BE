@@ -15,7 +15,7 @@ public interface SongRepository extends JpaRepository<Song, Long> {
     @Query("SELECT s FROM Song s ORDER BY SIZE(s.usersLike) DESC")
     List<Song> findSongsOrderByLikeCountDesc(Pageable pageable);
 
-    @Query("SELECT lh.song FROM ListenHistory lh WHERE lh.user.id = :userId ORDER BY lh.time DESC")
+    @Query("SELECT lh.song FROM ListenHistory lh WHERE lh.user.id = :userId AND lh.time IN (SELECT MAX(lh2.time) FROM ListenHistory lh2 WHERE lh2.user.id = :userId GROUP BY lh2.song) ORDER BY lh.time DESC")
     List<Song> findRecentSongsByUserId(int userId, Pageable pageable);
 
     @Query("SELECT s FROM Song s JOIN s.genreOfSong g WHERE g.id = :genreId")

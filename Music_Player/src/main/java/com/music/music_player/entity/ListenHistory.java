@@ -14,11 +14,11 @@ public class ListenHistory {
     @Column(name = "id_listen")
     private int id;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_user", nullable = false)
     User user;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_song", nullable = false)
     Song song;
 

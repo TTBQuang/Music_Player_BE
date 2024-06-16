@@ -3,8 +3,10 @@ package com.music.music_player.service;
 import com.music.music_player.dto.PaginatedResponse;
 import com.music.music_player.entity.Playlist;
 import com.music.music_player.entity.Song;
+import com.music.music_player.entity.User;
 import com.music.music_player.repository.PlaylistRepository;
 import com.music.music_player.repository.SongRepository;
+import com.music.music_player.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SongService {
@@ -20,6 +23,9 @@ public class SongService {
 
     @Autowired
     private PlaylistRepository playlistRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public PaginatedResponse<Song> getNewSongs(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
@@ -57,4 +63,17 @@ public class SongService {
         int totalItems = songRepository.countSongsByName(name);
         return new PaginatedResponse<>(songRepository.findSongByName(name, pageable), totalItems);
     }
+
+//    public boolean isSongLikedByUser(int userId, int songId) {
+//        Optional<User> userOptional = userRepository.findById((long) userId);
+//        if (userOptional.isPresent()) {
+//            User user = userOptional.get();
+//            for (Song song : user.getFavoriteSongs()) {
+//                if (song.getId() == songId) {
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+//    }
 }
