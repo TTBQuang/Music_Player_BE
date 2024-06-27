@@ -1,6 +1,7 @@
 package com.music.music_player.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -33,9 +34,15 @@ public class Song {
     @Column(nullable = false, name = "link_song")
     private String linkSong;
 
-    @ManyToMany(mappedBy = "favoriteSongs")
-    @JsonIgnore
+    @ManyToMany(mappedBy = "likedSongs")
+    @JsonProperty("users_like")
+    @JsonIgnoreProperties({"savedSongs", "likedSongs"})
     private Set<User> usersLike = new HashSet<>();
+
+    @ManyToMany(mappedBy = "savedSongs")
+    @JsonProperty("users_save")
+    @JsonIgnoreProperties({"savedSongs", "likedSongs"})
+    private Set<User> usersSave = new HashSet<>();
 
     @OneToMany(mappedBy = "song", cascade=CascadeType.ALL)
     @JsonIgnore

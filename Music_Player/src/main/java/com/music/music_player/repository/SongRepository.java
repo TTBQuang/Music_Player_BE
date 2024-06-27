@@ -30,6 +30,8 @@ public interface SongRepository extends JpaRepository<Song, Long> {
     @Query("SELECT COUNT(DISTINCT lh.song.id) FROM ListenHistory lh WHERE lh.user.id = :userId")
     int countRecentlyListenSong(int userId);
 
+    Song findById(int songId);
+
     /***
      If parameter [name] contains accents, the query will search with accents.
      Otherwise, the query will search without accents
@@ -45,4 +47,7 @@ public interface SongRepository extends JpaRepository<Song, Long> {
             "THEN unaccent(LOWER(public.song.name)) LIKE LOWER(concat('%', :name, '%')) " +
             "ELSE LOWER(public.song.name) LIKE LOWER(concat('%', :name, '%')) END")
     int countSongsByName(String name);
+
+    @Query("SELECT s FROM Song s JOIN s.usersSave u WHERE u.id = :userId")
+    List<Song> findSavedSongsByUserId(int userId);
 }

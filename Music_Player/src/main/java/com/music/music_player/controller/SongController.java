@@ -59,9 +59,35 @@ public class SongController {
         return ResponseEntity.ok(response);
     }
 
-//    @GetMapping("/songs/{songId}/users/{userId}/liked")
-//    public ResponseEntity<Boolean> isSongLikedByUser(@PathVariable int userId, @PathVariable int songId) {
-//        boolean isLiked = songService.isSongLikedByUser(userId, songId);
-//        return ResponseEntity.ok(isLiked);
-//    }
+    @GetMapping("/find_by_id")
+    public ResponseEntity<Song> findSongById(@RequestParam int id){
+        Song song = songService.findSongById(id);
+        return ResponseEntity.ok(song);
+    }
+
+    @PostMapping("/like")
+    public void likeSong(@RequestParam int userId, @RequestParam int songId) {
+        songService.likeSong(userId, songId);
+    }
+
+    @DeleteMapping("/unlike")
+    public void unlikeSong(@RequestParam int userId, @RequestParam int songId) {
+        songService.unlikeSong(userId, songId);
+    }
+
+    @PostMapping("/save")
+    public void saveSong(@RequestParam int userId, @RequestParam int songId) {
+        songService.saveSong(userId, songId);
+    }
+
+    @DeleteMapping("/remove_from_save")
+    public void removeSongFromSave(@RequestParam int userId, @RequestParam int songId) {
+        songService.removeSongFromSave(userId, songId);
+    }
+
+    @GetMapping("/saved")
+    public ResponseEntity<List<Song>> getSavedSongs(@RequestParam int userId) {
+        List<Song> savedSongs = songService.getSavedSongsByUserId(userId);
+        return ResponseEntity.ok(savedSongs);
+    }
 }

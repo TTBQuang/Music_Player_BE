@@ -22,6 +22,6 @@ public class ListenHistory {
     @JoinColumn(name = "id_song", nullable = false)
     Song song;
 
-    @JoinColumn(nullable = false)
-    LocalDateTime time;
+    @Column(nullable = false)
+    private LocalDateTime time;
 }

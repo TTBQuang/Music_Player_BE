@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,16 +65,83 @@ public class SongService {
         return new PaginatedResponse<>(songRepository.findSongByName(name, pageable), totalItems);
     }
 
-//    public boolean isSongLikedByUser(int userId, int songId) {
-//        Optional<User> userOptional = userRepository.findById((long) userId);
-//        if (userOptional.isPresent()) {
-//            User user = userOptional.get();
-//            for (Song song : user.getFavoriteSongs()) {
-//                if (song.getId() == songId) {
-//                    return true;
-//                }
-//            }
-//        }
-//        return false;
-//    }
+    public Song findSongById(int id) {
+        return songRepository.findById(id);
+    }
+
+    @Transactional
+    public void likeSong(int userId, int songId) {
+        Optional<User> userOptional = userRepository.findById((long) userId);
+        Optional<Song> songOptional = songRepository.findById((long) songId);
+
+        if (userOptional.isPresent() && songOptional.isPresent()) {
+            User user = userOptional.get();
+            Song song = songOptional.get();
+
+            if (user.getLikedSongs().contains(song)) {
+                return; // Song is already liked
+            }
+
+            user.getLikedSongs().add(song);
+            userRepository.save(user);
+        }
+    }
+
+    @Transactional
+    public void unlikeSong(int userId, int songId) {
+        Optional<User> userOptional = userRepository.findById((long) userId);
+        Optional<Song> songOptional = songRepository.findById((long) songId);
+
+        if (userOptional.isPresent() && songOptional.isPresent()) {
+            User user = userOptional.get();
+            Song song = songOptional.get();
+
+            if (!user.getLikedSongs().contains(song)) {
+                return; // Song is not liked
+            }
+
+            user.getLikedSongs().remove(song);
+            userRepository.save(user);
+        }
+    }
+
+    @Transactional
+    public void saveSong(int userId, int songId) {
+        Optional<User> userOptional = userRepository.findById((long) userId);
+        Optional<Song> songOptional = songRepository.findById((long) songId);
+
+        if (userOptional.isPresent() && songOptional.isPresent()) {
+            User user = userOptional.get();
+            Song song = songOptional.get();
+
+            if (user.getSavedSongs().contains(song)) {
+                return; // Song is already saved
+            }
+
+            user.getSavedSongs().add(song);
+            userRepository.save(user);
+        }
+    }
+
+    @Transactional
+    public void removeSongFromSave(int userId, int songId) {
+        Optional<User> userOptional = userRepository.findById((long) userId);
+        Optional<Song> songOptional = songRepository.findById((long) songId);
+
+        if (userOptional.isPresent() && songOptional.isPresent()) {
+            User user = userOptional.get();
+            Song song = songOptional.get();
+
+            if (!user.getSavedSongs().contains(song)) {
+                return; // Song is not saved
+            }
+
+            user.getSavedSongs().remove(song);
+            userRepository.save(user);
+        }
+    }
+
+    public List<Song> getSavedSongsByUserId(int userId) {
+        return songRepository.findSavedSongsByUserId(userId);
+    }
 }

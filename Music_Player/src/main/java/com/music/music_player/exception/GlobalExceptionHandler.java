@@ -22,5 +22,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleUnknownUserException(UnknownUserException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(UnknownSongException.class)
+    public ResponseEntity<String> handleUnknownSongException(UnknownSongException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(UnknownCommentException.class)
+    public ResponseEntity<String> handleUnknownCommentException(UnknownCommentException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
 

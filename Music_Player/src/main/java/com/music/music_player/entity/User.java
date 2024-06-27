@@ -1,6 +1,7 @@
 package com.music.music_player.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -28,20 +29,33 @@ public class User {
     @Column(name = "display_name", nullable = false)
     private String displayName;
 
-    @Column(nullable = false)
-    private String authority;
-
     @ManyToMany()
-    @JsonIgnore
+    @JsonIgnoreProperties({"usersSave", "usersLike"})
     @JoinTable(
             name = "user_like_song",
             joinColumns = @JoinColumn(name = "id_user"),
             inverseJoinColumns = @JoinColumn(name = "id_song"))
-    private Set<Song> favoriteSongs = new HashSet<>();
+    private Set<Song> likedSongs = new HashSet<>();
+
+    @ManyToMany()
+    @JsonIgnoreProperties({"usersSave", "usersLike"})
+    @JoinTable(
+            name = "user_save_song",
+            joinColumns = @JoinColumn(name = "id_user"),
+            inverseJoinColumns = @JoinColumn(name = "id_song"))
+    private Set<Song> savedSongs = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade=CascadeType.ALL)
     @JsonIgnore
     Set<ListenHistory> listenHistories;
+
+    @ManyToMany()
+    @JsonIgnore
+    @JoinTable(
+            name = "user_like_comment",
+            joinColumns = @JoinColumn(name = "id_user"),
+            inverseJoinColumns = @JoinColumn(name = "id_comment"))
+    private Set<Comment> likedComments = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

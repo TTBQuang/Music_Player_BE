@@ -21,6 +21,6 @@ public class SearchHistory {
     @JoinColumn(nullable = false)
     String query;
 
-    @JoinColumn(nullable = false)
-    LocalDateTime time;
+    @Column(nullable = false)
+    private LocalDateTime time;
 }
