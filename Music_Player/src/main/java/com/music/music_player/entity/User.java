@@ -29,6 +29,9 @@ public class User {
     @Column(name = "display_name", nullable = false)
     private String displayName;
 
+    @Column(name = "role")
+    private String role;
+
     @ManyToMany()
     @JsonIgnoreProperties({"usersSave", "usersLike"})
     @JoinTable(

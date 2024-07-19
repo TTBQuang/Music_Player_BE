@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/singer")
 public class SingerController {
@@ -22,6 +24,12 @@ public class SingerController {
             @RequestParam int pageNumber,
             @RequestParam int pageSize) {
         PaginatedResponse<Singer> response = singerService.findByName(name, pageNumber, pageSize);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/get_all")
+    public ResponseEntity<List<Singer>> getAllSingers() {
+        List<Singer> response = singerService.getAllSingers();
         return ResponseEntity.ok(response);
     }
 }

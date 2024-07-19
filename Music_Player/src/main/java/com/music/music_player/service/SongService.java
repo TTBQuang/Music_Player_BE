@@ -1,6 +1,7 @@
 package com.music.music_player.service;
 
 import com.music.music_player.dto.PaginatedResponse;
+import com.music.music_player.dto.UploadedSong;
 import com.music.music_player.entity.Playlist;
 import com.music.music_player.entity.Song;
 import com.music.music_player.entity.User;
@@ -13,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -143,5 +146,33 @@ public class SongService {
 
     public List<Song> getSavedSongsByUserId(int userId) {
         return songRepository.findSavedSongsByUserId(userId);
+    }
+
+    @Transactional(rollbackFor = { SQLException.class })
+    public void uploadSong(UploadedSong uploadedSong) throws SQLException {
+        String name = uploadedSong.getName();
+        String imageLink = uploadedSong.getImageLink();
+        String songLink = uploadedSong.getSongLink();
+        int singerId = uploadedSong.getSingerId();
+        int genreId = uploadedSong.getGenreId();
+        LocalDateTime releaseDate = uploadedSong.getReleaseDate();
+
+        try {
+            songRepository.saveSong(name, releaseDate, imageLink, songLink);
+        } catch (Exception e) {
+            throw new SQLException("Failed to insert song details", e);
+        }
+
+        try {
+            songRepository.saveSingerOfSong(singerId, name, songLink);
+        } catch (Exception e) {
+            throw new SQLException("Failed to link singer with song", e);
+        }
+
+        try {
+            songRepository.saveGenreOfSong(genreId, name, songLink);
+        } catch (Exception e) {
+            throw new SQLException("Failed to link genre with song", e);
+        }
     }
 }

@@ -1,9 +1,11 @@
 package com.music.music_player.controller;
 
 import com.music.music_player.dto.PaginatedResponse;
+import com.music.music_player.dto.UploadedSong;
 import com.music.music_player.entity.Song;
 import com.music.music_player.service.SongService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,7 +62,7 @@ public class SongController {
     }
 
     @GetMapping("/find_by_id")
-    public ResponseEntity<Song> findSongById(@RequestParam int id){
+    public ResponseEntity<Song> findSongById(@RequestParam int id) {
         Song song = songService.findSongById(id);
         return ResponseEntity.ok(song);
     }
@@ -89,5 +91,15 @@ public class SongController {
     public ResponseEntity<List<Song>> getSavedSongs(@RequestParam int userId) {
         List<Song> savedSongs = songService.getSavedSongsByUserId(userId);
         return ResponseEntity.ok(savedSongs);
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<Void> uploadSong(@RequestBody UploadedSong uploadedSong) {
+        try {
+            songService.uploadSong(uploadedSong);
+            return ResponseEntity.ok(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 }

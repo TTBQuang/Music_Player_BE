@@ -3,9 +3,12 @@ package com.music.music_player.repository;
 import com.music.music_player.entity.Song;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -50,4 +53,16 @@ public interface SongRepository extends JpaRepository<Song, Long> {
 
     @Query("SELECT s FROM Song s JOIN s.usersSave u WHERE u.id = :userId")
     List<Song> findSavedSongsByUserId(int userId);
+
+    @Modifying
+    @Query(value = "INSERT INTO song (name, release_date, image, link_song) VALUES (:name, :releaseDate, :imageLink, :songLink)", nativeQuery = true)
+    void saveSong(String name, LocalDateTime releaseDate, String imageLink, String songLink);
+
+    @Modifying
+    @Query(value = "INSERT INTO singer_of_song (id_singer, id_song) VALUES (:singerId, (SELECT id_song FROM song WHERE name = :name AND link_song = :songLink))", nativeQuery = true)
+    void saveSingerOfSong(int singerId, String name, String songLink);
+
+    @Modifying
+    @Query(value = "INSERT INTO genre_of_song (id_genre, id_song) VALUES (:genreId, (SELECT id_song FROM song WHERE name = :name AND link_song = :songLink))", nativeQuery = true)
+    void saveGenreOfSong(int genreId, String name, String songLink);
 }

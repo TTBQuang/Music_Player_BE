@@ -27,6 +27,7 @@ public class UserService {
         if (user.getDisplayName() == null) {
             user.setDisplayName(user.getUsername());
         }
+        user.setRole("user");
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);

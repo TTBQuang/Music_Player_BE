@@ -8,6 +8,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SingerService {
     @Autowired
@@ -17,5 +19,9 @@ public class SingerService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         int totalItems = singerRepository.countSingerByName(name);
         return new PaginatedResponse<>(singerRepository.findSingerByName(name, pageable), totalItems);
+    }
+
+    public List<Singer> getAllSingers(){
+        return singerRepository.findAll();
     }
 }
